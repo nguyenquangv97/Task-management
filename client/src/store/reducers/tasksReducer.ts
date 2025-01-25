@@ -1,5 +1,4 @@
 import { initialTasks } from '../../data';
-import { Task } from '../../data';
 import {
   ADD_TASK,
   DELETE_TASK,
@@ -77,11 +76,12 @@ const tasksReducer = (state = initialState, action: any) => {
       };
 
     case UPDATE_TASK_LIST:
+      const { newTasks, inProgressTasks, doneTasks } = action.payload;
       return {
         ...state,
-        newTasks: action.payload.filter((task: Task) => task.stage === 'new'),
-        inProgressTasks: action.payload.filter((task: Task) => task.stage === 'inProgress'),
-        doneTasks: action.payload.filter((task: Task) => task.stage === 'done'),
+        newTasks,
+        inProgressTasks,
+        doneTasks,
       };
 
     default:

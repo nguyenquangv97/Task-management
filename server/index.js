@@ -1,8 +1,7 @@
-const express = require('express');
-const http = require('http');
-const cors = require('cors');
-// socket.io import
-const { Server } = require('socket.io');
+import express from 'express';
+import http from 'http';
+import cors from 'cors';
+import { Server, Socket } from 'socket.io';
 
 const app = express();
 app.use(cors());
@@ -12,7 +11,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: 'http://localhost:5173',
-    method: ['GET', 'POST'],
+    methods: ['GET', 'POST'],
   },
 });
 
@@ -20,8 +19,8 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
   console.log('a user connected');
 
-  socket.on('createTask', (tasks) => {
-    io.emit('updateTasks', tasks);
+  socket.on('createTask', (updatedTasks) => {
+    io.emit('updateTasks', updatedTasks);
   });
 
   socket.on('disconnect', () => {

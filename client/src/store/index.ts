@@ -6,6 +6,7 @@ import tasksReducer from './reducers/tasksReducer';
 const persistConfig = {
   key: 'root',
   storage,
+  whitelist: ['tasks'], // Only persist the tasks reducer
 };
 
 const rootReducer = combineReducers({

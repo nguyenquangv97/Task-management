@@ -50,7 +50,11 @@ const NewTask = ({
     setIsCreating(false);
 
     // Emit the updated task list to the socket server
-    const updatedTasks = [...tasks[`${stage}Tasks` as keyof typeof tasks], updatedTask];
+    const updatedTasks = {
+      newTasks: stage === 'new' ? [updatedTask, ...tasks.newTasks] : tasks.newTasks,
+      inProgressTasks: stage === 'inProgress' ? [updatedTask, ...tasks.inProgressTasks] : tasks.inProgressTasks,
+      doneTasks: stage === 'done' ? [updatedTask, ...tasks.doneTasks] : tasks.doneTasks,
+    };
     socket.emit('createTask', updatedTasks);
   }
 

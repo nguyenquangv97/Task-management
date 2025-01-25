@@ -22,11 +22,11 @@ export const deleteTask = (taskId: string) => ({
 });
 
 export const toggleImportant = (taskId: string) => ({
-  type: 'TOGGLE_IMPORTANT',
+  type: TOGGLE_IMPORTANT,
   payload: taskId,
 });
 
-export const updateTaskList = (tasks: Task[]) => ({
+export const updateTaskList = (newTasks: Task[], inProgressTasks: Task[], doneTasks: Task[]) => ({
   type: UPDATE_TASK_LIST,
-  payload: tasks,
+  payload: { newTasks, inProgressTasks, doneTasks },
 });
