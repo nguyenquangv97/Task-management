@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Star } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Badge } from './ui/badge';
@@ -7,17 +6,37 @@ import { Card, CardContent, CardHeader } from './ui/card';
 
 import { Task } from '@/data';
 import { cn } from '@/lib/utils';
+import { RootState } from '@/store';
+import { useDispatch, useSelector } from 'react-redux';
+import io from 'socket.io-client';
+import { toggleImportant } from '../store/actions/taskActions';
 import TaskAction from './TaskAction';
-import { useDispatch } from 'react-redux';
-import {toggleImportant} from '../store/actions/taskActions'
+
+const socket = io('http://localhost:8000');
 
 interface TaskCardProps {
   task: Task;
 }
 
 const TaskCard = ({ task }: TaskCardProps) => {
-
   const dispatch = useDispatch();
+  const tasks = useSelector((state: RootState) => state.tasks);
+
+  function handleToggleImportant() {
+    dispatch(toggleImportant(task.id));
+    const updatedTasks = {
+      newTasks: tasks.newTasks.map((t: Task) =>
+        t.id === task.id ? { ...t, important: !t.important } : t
+      ),
+      inProgressTasks: tasks.inProgressTasks.map((t: Task) =>
+        t.id === task.id ? { ...t, important: !t.important } : t
+      ),
+      doneTasks: tasks.doneTasks.map((t: Task) =>
+        t.id === task.id ? { ...t, important: !t.important } : t
+      ),
+    };
+    socket.emit('updateTasks', updatedTasks);
+  }
 
   return (
     <Card
@@ -30,14 +49,18 @@ const TaskCard = ({ task }: TaskCardProps) => {
           <TaskAction task={task} />
           <div>
             <div className="flex items-center ">
-                <Button
+              <Button
                 variant="ghost"
                 size="icon"
                 className="h-8 w-8"
-                onClick={() => dispatch(toggleImportant(task.id))}
-                >
-                <Star className={`h-4 w-4 ${task.important ? 'fill-current text-yellow-500' : ''}`} />
-                </Button>
+                onClick={handleToggleImportant}
+              >
+                <Star
+                  className={`h-4 w-4 ${
+                    task.important ? 'fill-current text-yellow-500' : ''
+                  }`}
+                />
+              </Button>
               <h3 className="font-semibold">{task.title}</h3>
             </div>
             <p className="text-sm text-gray-500">{task.company}</p>

@@ -23,7 +23,7 @@ export const deleteTask = (taskId: string) => ({
 
 export const toggleImportant = (taskId: string) => ({
   type: TOGGLE_IMPORTANT,
-  payload: taskId,
+  payload: taskId ,
 });
 
 export const updateTaskList = (newTasks: Task[], inProgressTasks: Task[], doneTasks: Task[]) => ({

@@ -23,6 +23,10 @@ io.on('connection', (socket) => {
     io.emit('updateTasks', updatedTasks);
   });
 
+  socket.on('updateTasks', (updatedTasks) => {
+    io.emit('updateTasks', updatedTasks);
+  });
+
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });

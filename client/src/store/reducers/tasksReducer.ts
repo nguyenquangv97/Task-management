@@ -3,8 +3,8 @@ import {
   ADD_TASK,
   DELETE_TASK,
   TOGGLE_IMPORTANT,
-  UPDATE_TASK_STAGE,
   UPDATE_TASK_LIST,
+  UPDATE_TASK_STAGE,
 } from '../actions/taskActions';
 
 const initialState = {
@@ -29,16 +29,26 @@ const tasksReducer = (state = initialState, action: any) => {
 
       if (task) {
         task.stage = stage;
+        const updatedTasks = {
+          newTasks:
+            stage === 'new'
+              ? [task, ...state.newTasks.filter((task) => task.id !== taskId)]
+              : state.newTasks.filter((task) => task.id !== taskId),
+          inProgressTasks:
+            stage === 'inProgress'
+              ? [
+                  task,
+                  ...state.inProgressTasks.filter((task) => task.id !== taskId),
+                ]
+              : state.inProgressTasks.filter((task) => task.id !== taskId),
+          doneTasks:
+            stage === 'done'
+              ? [task, ...state.doneTasks.filter((task) => task.id !== taskId)]
+              : state.doneTasks.filter((task) => task.id !== taskId),
+        };
         return {
-          newTasks: state.newTasks.filter((task) => task.id !== taskId),
-          inProgressTasks: state.inProgressTasks.filter(
-            (task) => task.id !== taskId
-          ),
-          doneTasks: state.doneTasks.filter((task) => task.id !== taskId),
-          [`${stage}Tasks`]: [
-            task,
-            ...state[`${stage as string}Tasks` as keyof typeof state],
-          ],
+          ...state,
+          ...updatedTasks,
         };
       }
       return state;
