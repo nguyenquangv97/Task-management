@@ -73,7 +73,7 @@ The server listens for events such as `createTask` and `updateTasks` and emits t
 
 1. Clone the repository:
    ```bash
-   git clone git@github.com:nguyenquangv97/Task-management.git
+   git clone https://github.com/nguyenquangv97/Task-management.git
    ```
 
 2. Install dependencies for the client:
